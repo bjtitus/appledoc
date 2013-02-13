@@ -31,6 +31,7 @@ enum {
 	GBErrorHTMLDocumentTemplateMissing,
 	GBErrorHTMLIndexTemplateMissing,
 	GBErrorHTMLHierarchyTemplateMissing,
+    GBErrorHTMLFrameworkTemplateMissing,
 	
 	GBErrorDocSetDocumentTemplateMissing = 9000,
 	GBErrorDocSetInfoPlistTemplateMissing,

@@ -160,6 +160,7 @@
 	[self.tokenizer consume:2];
 	[self matchSuperclassForClass:class];
 	[self matchAdoptedProtocolForProvider:class.adoptedProtocols];
+    [self matchFrameworkForProvider:class.frameworks];
 	[self matchIvarsForProvider:class.ivars];
 	[self matchMethodDefinitionsForProvider:class.methods defaultsRequired:NO];
 	[self.store registerClass:class];
@@ -176,6 +177,7 @@
 	[self registerLastCommentToObject:category];
 	[self.tokenizer consume:5];
 	[self matchAdoptedProtocolForProvider:category.adoptedProtocols];
+    [self matchFrameworkForProvider:category.frameworks];
 	[self matchMethodDefinitionsForProvider:category.methods defaultsRequired:NO];
 	[self.store registerCategory:category];
 }
@@ -190,6 +192,7 @@
 	[self registerLastCommentToObject:extension];
 	[self.tokenizer consume:4];
 	[self matchAdoptedProtocolForProvider:extension.adoptedProtocols];
+    [self matchFrameworkForProvider:extension.frameworks];
 	[self matchMethodDefinitionsForProvider:extension.methods defaultsRequired:NO];
 	[self.store registerCategory:extension];
 }
@@ -204,6 +207,7 @@
 	[self registerLastCommentToObject:protocol];
 	[self.tokenizer consume:2];
 	[self matchAdoptedProtocolForProvider:protocol.adoptedProtocols];
+    [self matchFrameworkForProvider:protocol.frameworks];
 	[self matchMethodDefinitionsForProvider:protocol.methods defaultsRequired:YES];
 	[self.store registerProtocol:protocol];
 }
@@ -222,6 +226,22 @@
 		GBLogDebug(@"Matched adopted protocol %@.", protocol);
 		[provider registerProtocol:protocol];
 	}];
+}
+
+- (void)matchFrameworkForProvider:(GBFrameworksProvider *)provider {
+    //TODO: Find out if this is necessary
+    if([self.tokenizer.filename rangeOfString:@".framework"].location != NSNotFound)
+    {
+        NSPredicate *frameworkPred = [NSPredicate predicateWithFormat:@"SELF contains[c] '.framework'"];
+        NSArray *frameworkComponents = [[self.tokenizer.filename pathComponents] filteredArrayUsingPredicate:frameworkPred];
+        if([frameworkComponents count] > 0)
+        {
+            GBFrameworkData *framework = [[GBFrameworkData alloc] initWithName:[[frameworkComponents lastObject] stringByDeletingPathExtension]];
+            GBLogDebug(@"Matched framework: %@.", framework);
+            [provider registerFramework:framework];
+            [self.store registerFramework:framework];
+        }
+    }
 }
 
 - (void)matchIvarsForProvider:(GBIvarsProvider *)provider {

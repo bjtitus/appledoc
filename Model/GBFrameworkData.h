@@ -2,42 +2,39 @@
 //  GBProtocolData.h
 //  appledoc
 //
-//  Created by Tomaz Kragelj on 26.7.10.
+//  Created by Brandon Titus on 13.2.13.
 //  Copyright (C) 2010, Gentle Bytes. All rights reserved.
 //
 
 #import "GBModelBase.h"
 #import "GBObjectDataProviding.h"
 
-@class GBAdoptedProtocolsProvider;
 @class GBFrameworksProvider;
-@class GBMethodsProvider;
 
-/** Describes a protocol. */
-@interface GBProtocolData : GBModelBase <GBObjectDataProviding> {
-	@private
-	NSString *_protocolName;
-	GBAdoptedProtocolsProvider *_adoptedProtocols;
-	GBMethodsProvider *_methods;
+/** Describes a framework. */
+@interface GBFrameworkData : GBModelBase <GBObjectDataProviding> {
+    @private
+	NSString *_frameworkName;
+    GBFrameworksProvider *_frameworks;
 }
 
 ///---------------------------------------------------------------------------------------
 /// @name Initialization & disposal
 ///---------------------------------------------------------------------------------------
 
-/** Returns autoreleased instance of the protocol data with the given name.
+/** Returns autoreleased instance of the framework data with the given name.
  
- @param name The name of the protocol.
+ @param name The name of the framework.
  @return Returns initialized object.
  @exception NSException Thrown if the given name is `nil` or empty.
  */
-+ (id)protocolDataWithName:(NSString *)name;
++ (id)frameworkDataWithName:(NSString *)name;
 
-/** Initializes the protocol with he given name.
+/** Initializes the framework with he given name.
  
  This is the designated initializer.
  
- @param name The name of the protocol.
+ @param name The name of the framework.
  @return Returns initialized object.
  @exception NSException Thrown if the given name is `nil` or empty.
  */
@@ -47,16 +44,13 @@
 /// @name Protocol data
 ///---------------------------------------------------------------------------------------
 
-/** The name of the protocol. */
-@property (readonly) NSString *nameOfProtocol;
-
-/** Protocol's adopted protocols, available via `GBAdoptedProtocolsProvider`. */
-@property (readonly) GBAdoptedProtocolsProvider *adoptedProtocols;
-
-/** Protocol's methods, available via `GBMethodsProvider`. */
-@property (readonly) GBMethodsProvider *methods;
+/** The name of the framework. */
+@property (readonly) NSString *nameOfFramework;
 
 /** Frameworks the class is included in, available via `GBFrameworksProvider`. */
 @property (readonly) GBFrameworksProvider *frameworks;
+
+/** Protocol's methods, available via `GBMethodsProvider`. */
+//@property (readonly) GBMethodsProvider *methods;
 
 @end

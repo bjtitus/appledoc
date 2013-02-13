@@ -68,4 +68,7 @@
 /** Categories methods, available via `GBMethodsProvider`. */
 @property (readonly) GBMethodsProvider *methods;
 
+/** Frameworks the category is included in, available via `GBFrameworksProvider`. */
+@property (readonly) GBFrameworksProvider *frameworks;
+
 @end

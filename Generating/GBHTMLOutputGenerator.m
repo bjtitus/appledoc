@@ -30,6 +30,7 @@
 - (NSString *)htmlOutputPathForTemplateName:(NSString *)template;
 @property (readonly) GBTemplateHandler *htmlObjectTemplate;
 @property (readonly) GBTemplateHandler *htmlIndexTemplate;
+@property (readonly) GBTemplateHandler *htmlFrameworkTemplate;
 @property (readonly) GBTemplateHandler *htmlHierarchyTemplate;
 @property (readonly) GBTemplateHandler *htmlDocumentTemplate;
 @property (readonly) GBHTMLTemplateVariablesProvider *variablesProvider;
@@ -48,6 +49,7 @@
 	if (![self processClasses:error]) return NO;
 	if (![self processCategories:error]) return NO;
 	if (![self processProtocols:error]) return NO;
+    if (![self processFrameworks:error]) return NO;
 	if (![self processDocuments:error]) return NO;
 	if (![self processIndex:error]) return NO;
 	if (![self processHierarchy:error]) return NO;
@@ -105,6 +107,24 @@
 	return YES;
 }
 
+- (BOOL)processFrameworks:(NSError **)error {
+    for (GBFrameworkData *framework in self.store.frameworks) {
+        if (!framework.includeInOutput) continue;
+		GBLogInfo(@"Generating output for framework %@...", framework);
+        //TODO: Do right stuff here to return proper HTML
+		NSDictionary *vars = [self.variablesProvider variablesForFramework:framework withStore:self.store];
+		NSString *output = [self.htmlFrameworkTemplate renderObject:vars];
+		NSString *cleaned = [self stringByCleaningHtml:output];
+		NSString *path = [self htmlOutputPathForObject:framework];
+		if (![self writeString:cleaned toFile:[path stringByStandardizingPath] error:error]) {
+			GBLogWarn(@"Failed writing HTML for framework %@ to '%@'!", framework, path);
+			return NO;
+		}
+		GBLogDebug(@"Finished generating output for framework %@.", framework);
+	}
+	return YES;
+}
+
 - (BOOL)processDocuments:(NSError **)error {	
 	// First process all include paths by copying them over to the destination. Note that we do it even if no template is found - if the user specified some include path, we should use it...
 	NSString *docsUserPath = [self.outputUserPath stringByAppendingPathComponent:self.settings.htmlStaticDocumentsSubpath];
@@ -136,7 +156,7 @@
 
 - (BOOL)processIndex:(NSError **)error {
 	GBLogInfo(@"Generating output for index...");
-	if ([self.store.classes count] > 0 || [self.store.protocols count] > 0 || [self.store.categories count] > 0) {
+	if ([self.store.classes count] > 0 || [self.store.protocols count] > 0 || [self.store.categories count] > 0 || [self.store.frameworks count] > 0) {
 		NSDictionary *vars = [self.variablesProvider variablesForIndexWithStore:self.store];
 		NSString *output = [self.htmlIndexTemplate renderObject:vars];
 		NSString *cleaned = [self stringByCleaningHtml:output];
@@ -152,7 +172,7 @@
 
 - (BOOL)processHierarchy:(NSError **)error {
 	GBLogInfo(@"Generating output for hierarchy...");
-	if ([self.store.classes count] > 0 || [self.store.protocols count] > 0 || [self.store.categories count] > 0) {
+	if ([self.store.classes count] > 0 || [self.store.protocols count] > 0 || [self.store.categories count] > 0 || [self.store.frameworks count] > 0) {
 		NSDictionary *vars = [self.variablesProvider variablesForHierarchyWithStore:self.store];
 		NSString *output = [self.htmlHierarchyTemplate renderObject:vars];
 		NSString *cleaned = [self stringByCleaningHtml:output];
@@ -174,6 +194,13 @@
 		}
 		return NO;
 	}
+    if(!self.htmlFrameworkTemplate) {
+        if (error) {
+			NSString *desc = [NSString stringWithFormat:@"Framework template file 'framework-template.html' is missing at '%@'!", self.templateUserPath];
+			*error = [NSError errorWithCode:GBErrorHTMLFrameworkTemplateMissing description:desc reason:nil];
+        }
+        return NO;
+    }
 	if (!self.htmlDocumentTemplate) {
 		if (error) {
 			NSString *desc = [NSString stringWithFormat:@"Document template file 'document-template.html' is missing at '%@'!", self.templateUserPath];
@@ -239,6 +266,10 @@
 
 - (GBTemplateHandler *)htmlObjectTemplate {
 	return [self.templateFiles objectForKey:@"object-template.html"];
+}
+
+- (GBTemplateHandler *)htmlFrameworkTemplate {
+	return [self.templateFiles objectForKey:@"framework-template.html"];
 }
 
 - (GBTemplateHandler *)htmlIndexTemplate {

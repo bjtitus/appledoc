@@ -20,7 +20,6 @@
 - (NSString *)lineByPreprocessingHeaderDocDirectives:(NSString *)line;
 - (NSArray *)linesByReorderingHeaderDocDirectives:(NSArray *)lines;
 - (NSArray *)allTokensFromTokenizer:(PKTokenizer *)tokenizer;
-@property (retain) NSString *filename;
 @property (retain) NSString *input;
 @property (retain) NSArray *tokens;
 @property (assign) NSUInteger tokenIndex;

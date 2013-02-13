@@ -25,6 +25,7 @@
 		_protocolName = [name copy];
 		_adoptedProtocols = [[GBAdoptedProtocolsProvider alloc] initWithParentObject:self];
 		_methods = [[GBMethodsProvider alloc] initWithParentObject:self];
+        _frameworks = [[GBFrameworksProvider alloc] initWithParentObject:self];
 	}
 	return self;
 }

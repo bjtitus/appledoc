@@ -45,6 +45,16 @@
 					</Subnodes>
 				</Node>
 				{{/hasProtocols}}
+                {{#hasFrameworks}}
+                <Node type="folder">
+                    <Name>{{strings/docset/frameworksTitle}}</Name>
+					<Path>{{indexFilename}}</Path>
+					<Subnodes>
+						{{#frameworks}}{{>NodeRef}}
+						{{/frameworks}}
+					</Subnodes>
+                </Node>
+                {{/hasFrameworks}}
 			</Subnodes>
         </Node>
     </TOC>

@@ -12,6 +12,7 @@
 @class GBAdoptedProtocolsProvider;
 @class GBIvarsProvider;
 @class GBMethodsProvider;
+@class GBFrameworksProvider;
 
 /** Describes a class.
  */
@@ -58,6 +59,12 @@
 /** Superclass object if known object or `nil` if `nameOfSuperclass` is `nil` or doesn't point to a known class. */
 @property (retain) GBClassData *superclass;
 
+/** The framework which contains this class or `nil` if there is not one */
+@property (copy) NSString *nameOfFramework;
+
+/** Framework or `nil` if `nameOfFramework` is `nil` or doesn't point to a known framework. */
+//@property (retain) GBFrameworkData *framework;
+
 /** Class's adopted protocols, available via `GBAdoptedProtocolsProvider`. */
 @property (readonly) GBAdoptedProtocolsProvider *adoptedProtocols;
 
@@ -66,5 +73,8 @@
 
 /** Class's methods, available via `GBMethodsProvider`. */
 @property (readonly) GBMethodsProvider *methods;
+
+/** Frameworks the class is included in, available via `GBFrameworksProvider`. */
+@property (readonly) GBFrameworksProvider *frameworks;
 
 @end

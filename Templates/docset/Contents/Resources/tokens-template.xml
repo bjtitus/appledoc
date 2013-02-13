@@ -38,6 +38,10 @@ Section DeclaredIn
 	<DeclaredIn>{{declaredin}}</DeclaredIn>
 EndSection
 
+Section Framework
+    <Framework>{{framework}}</Framework>
+EndSection
+
 Section RelatedTokens
 	{{#hasRelatedTokens}}
 	<RelatedTokens>

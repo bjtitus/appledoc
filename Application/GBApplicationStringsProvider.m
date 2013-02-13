@@ -25,6 +25,7 @@
 		[result setObject:@"%@ Class Reference" forKey:@"classTitle"];
 		[result setObject:@"%1$@(%2$@) Category Reference" forKey:@"categoryTitle"];
 		[result setObject:@"%@ Protocol Reference" forKey:@"protocolTitle"];
+        [result setObject:@"%@ Framework Reference" forKey:@"frameworkTitle"];
 		[result setObject:@"%@ Methods" forKey:@"mergedCategorySectionTitle"];
 		[result setObject:@"Extension Methods" forKey:@"mergedExtensionSectionTitle"];
 		[result setObject:@"%2$@ from %1$@" forKey:@"mergedPrefixedCategorySectionTitle"];
@@ -39,6 +40,7 @@
 		[result setObject:@"Inherits from" forKey:@"inheritsFrom"];
 		[result setObject:@"Conforms to" forKey:@"conformsTo"];
 		[result setObject:@"Declared in" forKey:@"declaredIn"];
+        [result setObject:@"Framework" forKey:@"frameworks"];
 		[result setObject:@"Companion guide" forKey:@"companionGuide"];
 	}
 	return result;
@@ -105,6 +107,7 @@
 		[result setObject:@"Class References" forKey:@"classesTitle"];
 		[result setObject:@"Category References" forKey:@"categoriesTitle"];
 		[result setObject:@"Protocol References" forKey:@"protocolsTitle"];
+        [result setObject:@"Framework References" forKey:@"frameworksTitle"];
 	}
 	return result;
 }
@@ -117,6 +120,7 @@
 		[result setObject:@"Class Hierarchy" forKey:@"classesTitle"];
 		[result setObject:@"Category References" forKey:@"categoriesTitle"];
 		[result setObject:@"Protocol References" forKey:@"protocolsTitle"];
+        [result setObject:@"Framework References" forKey:@"frameworksTitle"];
 	}
 	return result;
 }
@@ -131,6 +135,7 @@
 		[result setObject:@"Classes" forKey:@"classesTitle"];
 		[result setObject:@"Categories" forKey:@"categoriesTitle"];
 		[result setObject:@"Protocols" forKey:@"protocolsTitle"];
+        [result setObject:@"Frameworks" forKey:@"protocolsTitle"];
 	}
 	return result;
 }

@@ -35,10 +35,12 @@
 - (NSString *)pageTitleForClass:(GBClassData *)object;
 - (NSString *)pageTitleForCategory:(GBCategoryData *)object;
 - (NSString *)pageTitleForProtocol:(GBProtocolData *)object;
+- (NSString *)pageTitleForFramework:(GBFrameworkData *)object;
 - (NSString *)pageTitleForDocument:(GBDocumentData *)object;
 - (NSDictionary *)specificationsForClass:(GBClassData *)object;
 - (NSDictionary *)specificationsForCategory:(GBCategoryData *)object;
 - (NSDictionary *)specificationsForProtocol:(GBProtocolData *)object;
+- (NSDictionary *)specificationsForFramework:(GBFrameworkData *)object;
 
 @end
 
@@ -49,6 +51,7 @@
 - (void)registerObjectInheritsFromSpecificationForClass:(GBClassData *)class toArray:(NSMutableArray *)array;
 - (void)registerObjectConformsToSpecificationForProvider:(id<GBObjectDataProviding>)provider toArray:(NSMutableArray *)array;
 - (void)registerObjectDeclaredInSpecificationForProvider:(GBModelBase *)provider toArray:(NSMutableArray *)array;
+- (void)registerObjectFrameworkSpecificationForProvider:(id<GBObjectDataProviding>)provider toArray:(NSMutableArray *)array;
 - (void)registerObjectCompanionGuidesSpecificationForObject:(GBModelBase *)object toArray:(NSMutableArray *)array;
 
 - (NSDictionary *)objectSpecificationWithValues:(NSArray *)values title:(NSString *)title;
@@ -67,6 +70,7 @@
 - (NSArray *)classesForIndex;
 - (NSArray *)categoriesForIndex;
 - (NSArray *)protocolsForIndex;
+- (NSArray *)frameworksForIndex;
 - (NSArray *)classesForHierarchy;
 - (NSArray *)arrayFromHierarchyLevel:(NSDictionary *)level;
 - (void)registerObjectsUsageForIndexInDictionary:(NSMutableDictionary *)dict;
@@ -141,6 +145,21 @@
 	return result;
 }
 
+- (NSDictionary *)variablesForFramework:(GBFrameworkData *)object withStore:(id)aStore {
+	self.store = aStore;
+	NSMutableDictionary *page = [NSMutableDictionary dictionary];
+	[page setObject:[self pageTitleForFramework:object] forKey:@"title"];
+	[page setObject:[self specificationsForFramework:object] forKey:@"specifications"];
+	[self addFooterVarsToDictionary:page];
+	NSMutableDictionary *result = [NSMutableDictionary dictionary];
+	[result setObject:page forKey:@"page"];
+	[result setObject:object forKey:@"object"];
+	[result setObject:self.settings.projectCompany forKey:@"projectCompany"];
+	[result setObject:self.settings.projectName forKey:@"projectName"];
+	[result setObject:self.settings.stringTemplates forKey:@"strings"];
+	return result;
+}
+
 - (NSDictionary *)variablesForDocument:(GBDocumentData *)object withStore:(id)aStore {
 	self.store = aStore;
 	NSString *path = [self.settings htmlRelativePathToIndexFromObject:object];
@@ -171,6 +190,7 @@
 	[result setObject:[self documentsForIndex] forKey:@"docs"];
 	[result setObject:[self classesForIndex] forKey:@"classes"];
 	[result setObject:[self protocolsForIndex] forKey:@"protocols"];
+    [result setObject:[self frameworksForIndex] forKey:@"frameworks"];
 	[result setObject:[self categoriesForIndex] forKey:@"categories"];
 	[result setObject:self.settings.stringTemplates forKey:@"strings"];
 	[result setObject:self.settings.projectCompany forKey:@"projectCompany"];
@@ -190,6 +210,7 @@
 	[result setObject:page forKey:@"page"];
 	[result setObject:[self classesForHierarchy] forKey:@"classes"];
 	[result setObject:[self protocolsForIndex] forKey:@"protocols"];
+    [result setObject:[self frameworksForIndex] forKey:@"frameworks"];
 	[result setObject:[self categoriesForIndex] forKey:@"categories"];
 	[result setObject:self.settings.stringTemplates forKey:@"strings"];
 	[result setObject:self.settings.projectCompany forKey:@"projectCompany"];
@@ -205,7 +226,8 @@
 	if (!object) return nil;
 	if ([object isKindOfClass:[GBClassData class]] && ![[self.store classes] containsObject:object]) return nil;
 	if ([object isKindOfClass:[GBCategoryData class]] && ![[self.store categories] containsObject:object]) return nil;
-	if ([object isKindOfClass:[GBProtocolData class]] && ![[self.store protocols] containsObject:object]) return nil;
+	if ([object isKindOfClass:[GBProtocolData class]] && ![self.store protocolWithName:[(GBProtocolData *)object nameOfProtocol]]) return nil;
+    if ([object isKindOfClass:[GBFrameworkData class]] && ![self.store frameworkWithName:[(GBFrameworkData *)object nameOfFramework]]) return nil;
 	if ([object isKindOfClass:[GBDocumentData class]] && ![[self.store documents] containsObject:object]) return nil;
 	return [self.settings htmlReferenceForObject:object fromSource:source];
 }
@@ -264,6 +286,11 @@
 	return [NSString stringWithFormat:template, object.nameOfProtocol];
 }
 
+- (NSString *)pageTitleForFramework:(GBFrameworkData *)object {
+	NSString *template = [self.settings.stringTemplates valueForKeyPath:@"objectPage.frameworkTitle"];
+	return [NSString stringWithFormat:template, object.nameOfFramework];
+}
+
 - (NSString *)pageTitleForDocument:(GBDocumentData *)object {
 	NSString *template = [self.settings.stringTemplates valueForKeyPath:@"documentPage.titleTemplate"];
 	
@@ -280,6 +307,7 @@
 	NSMutableArray *result = [NSMutableArray array];
 	[self registerObjectInheritsFromSpecificationForClass:object toArray:result];
 	[self registerObjectConformsToSpecificationForProvider:object toArray:result];
+    [self registerObjectFrameworkSpecificationForProvider:object toArray:result];
 	[self registerObjectDeclaredInSpecificationForProvider:object toArray:result];
 	[self registerObjectCompanionGuidesSpecificationForObject:object toArray:result];
 	return [self arrayDescriptorForArray:result];
@@ -289,6 +317,7 @@
 	NSMutableArray *result = [NSMutableArray array];
 	[self registerObjectConformsToSpecificationForProvider:object toArray:result];
 	[self registerObjectDeclaredInSpecificationForProvider:object toArray:result];
+    [self registerObjectFrameworkSpecificationForProvider:object toArray:result];
 	[self registerObjectCompanionGuidesSpecificationForObject:object toArray:result];
 	return [self arrayDescriptorForArray:result];
 }
@@ -297,7 +326,16 @@
 	NSMutableArray *result = [NSMutableArray array];
 	[self registerObjectConformsToSpecificationForProvider:object toArray:result];
 	[self registerObjectDeclaredInSpecificationForProvider:object toArray:result];
+    [self registerObjectFrameworkSpecificationForProvider:object toArray:result];
 	[self registerObjectCompanionGuidesSpecificationForObject:object toArray:result];
+	return [self arrayDescriptorForArray:result];
+}
+
+- (NSDictionary *)specificationsForFramework:(GBFrameworkData *)object {
+	NSMutableArray *result = [NSMutableArray array];
+	[self registerObjectFrameworkSpecificationForProvider:object toArray:result];
+//	[self registerObjectDeclaredInSpecificationForProvider:object toArray:result];
+//	[self registerObjectCompanionGuidesSpecificationForObject:object toArray:result];
 	return [self arrayDescriptorForArray:result];
 }
 
@@ -357,6 +395,23 @@
 	}];
 	NSArray *values = [self delimitObjectSpecificationValues:specifications withDelimiter:@"<br />"];
 	NSString *title = [self.settings.stringTemplates valueForKeyPath:@"objectSpecifications.declaredIn"];
+	NSDictionary *data = [self objectSpecificationWithValues:values title:title];
+	[array addObject:data];
+}
+
+- (void)registerObjectFrameworkSpecificationForProvider:(id<GBObjectDataProviding>)provider toArray:(NSMutableArray *)array {
+    // Prepares the Frameworks specification with links to all frameworks which contain this document
+    if ([provider.frameworks.frameworks count] == 0) return;
+	NSMutableArray *frameworks = [NSMutableArray arrayWithCapacity:[provider.frameworks.frameworks count]];
+	NSArray *includedFrameworks = [provider.frameworks frameworksSortedByName];
+	[includedFrameworks enumerateObjectsUsingBlock:^(GBFrameworkData *framework, NSUInteger idx, BOOL *stop) {
+		NSString *name = framework.nameOfFramework;
+		NSString *href = [self hrefForObject:framework fromObject:provider];
+		NSDictionary *data = [self objectSpecificationValueWithData:name href:href];
+		[frameworks addObject:data];
+	}];
+	NSArray *values = [self delimitObjectSpecificationValues:frameworks withDelimiter:@"<br />"];
+	NSString *title = [self.settings.stringTemplates valueForKeyPath:@"objectSpecifications.frameworks"];
 	NSDictionary *data = [self objectSpecificationWithValues:values title:title];
 	[array addObject:data];
 }
@@ -476,6 +531,19 @@
 	}
 	return result;
 }
+     
+- (NSArray *)frameworksForIndex {
+    NSArray *frameworks = [self.store frameworksSortedByName];
+    NSMutableArray *result = [NSMutableArray arrayWithCapacity:[frameworks count]];
+    for (GBFrameworkData *framework in frameworks) {
+        if (!framework.includeInOutput) continue;
+        NSMutableDictionary *data = [NSMutableDictionary dictionaryWithCapacity:2];
+        [data setObject:[self hrefForObject:framework fromObject:nil] forKey:@"href"];
+        [data setObject:framework.nameOfFramework forKey:@"title"];
+        [result addObject:data];
+    }
+    return result;
+}
 
 - (NSArray *)classesForHierarchy {
 	// This returns the array of all root classes, each class containing further arrays of subclasses and so on. Ussually root classes array only contains single NSObject class, but can also include all root classes (not derived from NSObject). The algorithm for creating hierarhy is not state of the art, but it's quite simple and effective: for each class we iterate over it's whole hierarchy until we arrive at it's root class, creating an flat list of hierarchy for this class. Then we use the flat list to add all unknown class names to the hierarchy dictionary, together with all subclasses. When we process all classes like this, we have a dictionary with proper inheritance.
@@ -538,12 +606,14 @@
 	BOOL documents = [self.store.documents count] > 0;
 	BOOL classes = [self.store.classes count] > 0;
 	BOOL categories = [self.store.categories count] > 0;
-	BOOL protocols = [self.store.protocols count] > 0; 
+	BOOL protocols = [self.store.protocols count] > 0;
+    BOOL frameworks = [self.store.frameworks count] > 0;
 	[dict setObject:documents ? [GRYes yes] : [GRNo no] forKey:@"hasDocs"];
 	[dict setObject:classes ? [GRYes yes] : [GRNo no] forKey:@"hasClasses"];
 	[dict setObject:categories ? [GRYes yes] : [GRNo no] forKey:@"hasCategories"];
 	[dict setObject:protocols ? [GRYes yes] : [GRNo no] forKey:@"hasProtocols"];
 	[dict setObject:(protocols || categories) ? [GRYes yes] : [GRNo no] forKey:@"hasProtocolsOrCategories"];
+    [dict setObject:frameworks ? [GRYes yes] : [GRNo no] forKey:@"hasFrameworks"];
 }
 
 @end

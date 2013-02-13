@@ -57,6 +57,16 @@
 						{{/hasCategories}}
 					</div>
 					{{/hasProtocolsOrCategories}}
+                    {{#hasFrameworks}}
+                    <div class="index-column">
+						<h2 class="index-title">{{strings/indexPage/frameworksTitle}}</h2>
+						<ul>
+                            {{#frameworks}}
+                            <li><a href="{{href}}">{{title}}</a></li>
+                            {{/frameworks}}
+						</ul>
+                    </div>
+                    {{/hasFrameworks}}
 				</div>
 				<div class="main-navigation navigation-bottom">
 					{{>Navigation}}

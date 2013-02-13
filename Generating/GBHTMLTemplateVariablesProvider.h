@@ -54,6 +54,7 @@
  @exception NSException Thrown if the given object or store is `nil`.
  @see variablesForCategory:withStore:
  @see variablesForProtocol:withStore:
+ @see variablesForFramework:withStore:
  @see variablesForDocument:withStore:
  @see variablesForIndexWithStore:
  @see variablesForHierarchyWithStore:
@@ -70,6 +71,7 @@
  @exception NSException Thrown if the given object or store is `nil`.
  @see variablesForClass:withStore:
  @see variablesForProtocol:withStore:
+ @see variablesForFramework:withStore:
  @see variablesForDocument:withStore:
  @see variablesForIndexWithStore:
  @see variablesForHierarchyWithStore:
@@ -86,11 +88,30 @@
  @exception NSException Thrown if the given object or store is `nil`.
  @see variablesForClass:withStore:
  @see variablesForCategory:withStore:
+ @see variablesForFramework:withStore:
  @see variablesForDocument:withStore:
  @see variablesForIndexWithStore:
  @see variablesForHierarchyWithStore:
  */
 - (NSDictionary *)variablesForProtocol:(GBProtocolData *)object withStore:(id)store;
+
+/** Returns the variables for the given `GBFrameworkData` using the given `GBStore` for links.
+ 
+ The result can be used with `GBTemplateHandler` to generate framework specific output.
+ 
+ @param object The framework for which to return variables.
+ @param store Store provider to be used for links generation.
+ @return Returns dictionary of all variables
+ @exception NSException Thrown if the given object or store is `nil`.
+ @see variablesForClass:withStore:
+ @see variablesForCategory:withStore:
+ @see variablesForProtocol:withStore:
+ @see variablesForDocument:withStore:
+ @see variablesForIndexWithStore:
+ @see variablesForHierarchyWithStore:
+ */
+- (NSDictionary *)variablesForFramework:(GBFrameworkData *)object withStore:(id)store;
+
 
 /** Returns the variables for the given `GBDocumentData` using the given `GBStore` for links. 
  
@@ -103,6 +124,7 @@
  @see variablesForClass:withStore:
  @see variablesForCategory:withStore:
  @see variablesForProtocol:withStore:
+ @see variablesForFramework:withStore:
  @see variablesForIndexWithStore:
  @see variablesForHierarchyWithStore:
  */
@@ -118,6 +140,7 @@
  @see variablesForClass:withStore:
  @see variablesForCategory:withStore:
  @see variablesForProtocol:withStore:
+ @see variablesForFramework:withStore:
  @see variablesForDocument:withStore:
  @see variablesForHierarchyWithStore:
  */
@@ -133,6 +156,7 @@
  @see variablesForClass:withStore:
  @see variablesForCategory:withStore:
  @see variablesForProtocol:withStore:
+ @see variablesForFramework:withStore:
  @see variablesForDocument:withStore:
  @see variablesForIndexWithStore:
  */

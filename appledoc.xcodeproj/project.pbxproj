@@ -234,6 +234,8 @@
 		D818BACE15203AA700B26451 /* GHUnit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 733EA0F1122BDC5B0060CBDE /* GHUnit.framework */; };
 		D818BACF15203AA700B26451 /* OCMock.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 73FC6EDF11FCE01E00AAD0B9 /* OCMock.framework */; };
 		D818BAD015203AA700B26451 /* OCHamcrest.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 73FC6E1E11FCD5E200AAD0B9 /* OCHamcrest.framework */; };
+		F5E1646216CBF9BF00B7A10A /* GBFrameworkData.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E1646116CBF9BE00B7A10A /* GBFrameworkData.m */; };
+		F5E1646516CBFA6E00B7A10A /* GBFrameworksProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E1646416CBFA6E00B7A10A /* GBFrameworksProvider.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -550,6 +552,10 @@
 		B4D1FFF215FF633F009736E2 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		B4D1FFF615FF643D009736E2 /* install-appledoc.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "install-appledoc.sh"; sourceTree = "<group>"; };
 		F59056EC16C1C6DC00391620 /* publish */ = {isa = PBXFileReference; lastKnownFileType = folder; path = publish; sourceTree = "<group>"; };
+		F5E1646016CBF9BE00B7A10A /* GBFrameworkData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBFrameworkData.h; sourceTree = "<group>"; };
+		F5E1646116CBF9BE00B7A10A /* GBFrameworkData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBFrameworkData.m; sourceTree = "<group>"; };
+		F5E1646316CBFA6E00B7A10A /* GBFrameworksProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBFrameworksProvider.h; sourceTree = "<group>"; };
+		F5E1646416CBFA6E00B7A10A /* GBFrameworksProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBFrameworksProvider.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -911,6 +917,8 @@
 				7367B84D11FEF496005ED6CD /* GBCategoryData.m */,
 				73FC72A911FD95A200AAD0B9 /* GBProtocolData.h */,
 				73FC72AA11FD95A200AAD0B9 /* GBProtocolData.m */,
+				F5E1646016CBF9BE00B7A10A /* GBFrameworkData.h */,
+				F5E1646116CBF9BE00B7A10A /* GBFrameworkData.m */,
 				73FC731111FDADD600AAD0B9 /* GBIvarData.h */,
 				73FC731211FDADD600AAD0B9 /* GBIvarData.m */,
 				73FC741B11FE215E00AAD0B9 /* GBMethodData.h */,
@@ -1111,6 +1119,8 @@
 			children = (
 				73FC729711FD925B00AAD0B9 /* GBAdoptedProtocolsProvider.h */,
 				73FC729811FD925B00AAD0B9 /* GBAdoptedProtocolsProvider.m */,
+				F5E1646316CBFA6E00B7A10A /* GBFrameworksProvider.h */,
+				F5E1646416CBFA6E00B7A10A /* GBFrameworksProvider.m */,
 				73FC730611FDAACD00AAD0B9 /* GBIvarsProvider.h */,
 				73FC730711FDAACD00AAD0B9 /* GBIvarsProvider.m */,
 				73FC740F11FE1FDF00AAD0B9 /* GBMethodsProvider.h */,
@@ -1500,6 +1510,8 @@
 				B4D1FFE115FF5F05009736E2 /* DDZipWriter.m in Sources */,
 				B4D1FFE315FF5F05009736E2 /* DDEmbeddedDataReader.m in Sources */,
 				B4D1FFE515FF5F05009736E2 /* DDXcodeProjectFile.m in Sources */,
+				F5E1646216CBF9BF00B7A10A /* GBFrameworkData.m in Sources */,
+				F5E1646516CBFA6E00B7A10A /* GBFrameworksProvider.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

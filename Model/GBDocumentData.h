@@ -11,6 +11,7 @@
 
 @class GBAdoptedProtocolsProvider;
 @class GBMethodsProvider;
+@class GBFrameworksProvider;
 
 /** Describes a static document.
  */
@@ -18,6 +19,7 @@
 	@private
 	GBAdoptedProtocolsProvider *_adoptedProtocols;
 	GBMethodsProvider *_methods;
+    GBFrameworksProvider *_frameworks;
 }
 
 ///---------------------------------------------------------------------------------------

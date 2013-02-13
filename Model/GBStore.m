@@ -22,6 +22,8 @@
 		_categoriesByName = [[NSMutableDictionary alloc] init];
 		_protocols = [[NSMutableSet alloc] init];
 		_protocolsByName = [[NSMutableDictionary alloc] init];
+        _frameworks = [[NSMutableSet alloc] init];
+        _frameworksByName = [[NSMutableDictionary alloc] init];
 		_documents = [[NSMutableSet alloc] init];
 		_documentsByName = [[NSMutableDictionary alloc] init];
 		_customDocuments = [[NSMutableSet alloc] init];
@@ -33,7 +35,7 @@
 #pragma mark Overriden methods
 
 - (NSString *)debugDescription {
-	return [NSString stringWithFormat:@"%@{ %lu classes, %lu categories, %lu protocols }", [self className], [self.classes count], [self.categories count], [self.protocols count]];
+	return [NSString stringWithFormat:@"%@{ %lu classes, %lu categories, %lu protocols, %lu frameworks }", [self className], [self.classes count], [self.categories count], [self.protocols count], [self.frameworks count]];
 }
 
 #pragma mark Helper methods
@@ -58,6 +60,11 @@
 - (NSArray *)protocolsSortedByName {
 	NSArray *descriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"protocolName" ascending:YES]];
 	return [[self.protocols allObjects] sortedArrayUsingDescriptors:descriptors];
+}
+
+- (NSArray *)frameworksSortedByName {
+    NSArray *descriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"frameworkName" ascending:YES]];
+    return [[self.frameworks allObjects] sortedArrayUsingDescriptors:descriptors];
 }
 
 #pragma mark Registration handling
@@ -102,6 +109,19 @@
 	[_protocolsByName setObject:protocol forKey:protocol.nameOfProtocol];
 }
 
+- (void)registerFramework:(GBFrameworkData *)framework {
+    NSParameterAssert(framework != nil);
+	GBLogDebug(@"Registering framework %@...", framework);
+	if ([_frameworks containsObject:framework]) return;
+	GBFrameworkData *existingFramework = [_frameworksByName objectForKey:framework.nameOfFramework];
+	if (existingFramework) {
+		[existingFramework mergeDataFromObject:framework];
+		return;
+	}
+	[_frameworks addObject:framework];
+	[_frameworksByName setObject:framework forKey:framework.nameOfFramework];
+}
+
 - (void)registerDocument:(GBDocumentData *)document {
 	NSParameterAssert(document != nil);
 	GBLogDebug(@"Registering document %@...", document);
@@ -140,6 +160,10 @@
 		[_protocolsByName removeObjectForKey:[object nameOfProtocol]];
 		return;
 	}
+    if ([_frameworks containsObject:object]) {
+        [_frameworks removeObject:object];
+        [_frameworksByName removeObjectForKey:[object nameOfFramework]];
+    }
 }
 
 #pragma mark Data providing
@@ -156,6 +180,10 @@
 	return [_protocolsByName objectForKey:name];
 }
 
+- (GBFrameworkData *)frameworkWithName:(NSString *)name {
+    return [_frameworksByName objectForKey:name];
+}
+
 - (GBDocumentData *)documentWithName:(NSString *)path {
 	return [_documentsByName objectForKey:path];
 }
@@ -167,6 +195,7 @@
 @synthesize classes = _classes;
 @synthesize categories = _categories;
 @synthesize protocols = _protocols;
+@synthesize frameworks = _frameworks;
 @synthesize documents = _documents;
 @synthesize customDocuments = _customDocuments;
 

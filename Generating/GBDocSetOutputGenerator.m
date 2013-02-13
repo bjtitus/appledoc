@@ -34,6 +34,7 @@
 @property (retain) NSArray *classes;
 @property (retain) NSArray *categories;
 @property (retain) NSArray *protocols;
+@property (retain) NSArray *frameworks;
 @property (readonly) NSMutableSet *temporaryFiles;
 
 @end
@@ -142,10 +143,12 @@
 	[vars setObject:([self.classes count] > 0) ? [GRYes yes] : [GRNo no] forKey:@"hasClasses"];
 	[vars setObject:([self.categories count] > 0) ? [GRYes yes] : [GRNo no] forKey:@"hasCategories"];
 	[vars setObject:([self.protocols count] > 0) ? [GRYes yes] : [GRNo no] forKey:@"hasProtocols"];
+    [vars setObject:([self.frameworks count] > 0) ? [GRYes yes] : [GRNo no] forKey:@"hasFrameworks"];
 	[vars setObject:self.documents forKey:@"docs"];
 	[vars setObject:self.classes forKey:@"classes"];
 	[vars setObject:self.categories forKey:@"categories"];
 	[vars setObject:self.protocols forKey:@"protocols"];
+    [vars setObject:self.frameworks forKey:@"frameworks"];
 	[vars setObject:self.settings.stringTemplates forKey:@"strings"];
 	
 	// Run the template and save the results.
@@ -177,6 +180,7 @@
 	if (![self processTokensXmlForObjects:self.classes type:@"cl" template:templatePath index:&index error:error]) return NO;
 	if (![self processTokensXmlForObjects:self.categories type:@"cat" template:templatePath index:&index error:error]) return NO;
 	if (![self processTokensXmlForObjects:self.protocols type:@"intf" template:templatePath index:&index error:error]) return NO;
+    if(![self processTokensXmlForObjects:self.frameworks type:@"fram" template:templatePath index:&index error:error]) return NO;
 	return YES;
 }
 
@@ -225,7 +229,13 @@
 	for (NSMutableDictionary *simplifiedObjectData in objects) {
 		// Get the object's methods provider and prepare the array of all methods.
 		GBModelBase *topLevelObject = [simplifiedObjectData objectForKey:@"object"];
-		GBMethodsProvider *methodsProvider = [topLevelObject valueForKey:@"methods"];
+        GBMethodsProvider *methodsProvider;
+        if([topLevelObject respondsToSelector:@selector(methods)])
+            methodsProvider = [topLevelObject valueForKey:@"methods"];
+        else
+        {
+            NSLog(@"HERE");
+        }
 		
 		// Prepare template variables for object. Note that we reuse the ID assigned while creating the data for Nodes.xml.
 		NSMutableDictionary *objectData = [NSMutableDictionary dictionaryWithCapacity:2];
@@ -265,7 +275,8 @@
 
 - (void)addTokensXmlModelObjectDataForObject:(GBModelBase *)object toData:(NSMutableDictionary *)data {
 	[data setObject:[self tokenIdentifierForObject:object] forKey:@"identifier"];
-	[data setObject:[[object.sourceInfosSortedByName objectAtIndex:0] filename] forKey:@"declaredin"];
+    if([object.sourceInfosSortedByName count] > 0)
+        [data setObject:[[object.sourceInfosSortedByName objectAtIndex:0] filename] forKey:@"declaredin"];
 	if (object.comment) {
 		if (object.comment.hasShortDescription) {
 			GBCommentComponentsList *components = [GBCommentComponentsList componentsList];
@@ -353,7 +364,10 @@
 		} else if ([object isKindOfClass:[GBProtocolData class]]){
 			NSString *objectName = [(GBProtocolData *)object nameOfProtocol];
 			return [NSString stringWithFormat:@"//apple_ref/occ/intf/%@", objectName];
-		}
+		} else if ([object isKindOfClass:[GBFrameworkData class]]){
+            NSString *objectName = [(GBFrameworkData *)object nameOfFramework];
+            return [NSString stringWithFormat:@"//apple_ref/occ/fram/%@", objectName];
+        }
 	} else if ([object isKindOfClass:[GBDocumentData class]]){
         NSString *objectName = [(GBDocumentData *)object prettyNameOfDocument];
         return [NSString stringWithFormat:@"//apple_ref/occ/doc/%@", objectName];
@@ -394,6 +408,7 @@
 	self.classes = [self simplifiedObjectsFromObjects:[self.store classesSortedByName] value:@"nameOfClass" index:&index];
 	self.categories = [self simplifiedObjectsFromObjects:[self.store categoriesSortedByName] value:@"idOfCategory" index:&index];
 	self.protocols = [self simplifiedObjectsFromObjects:[self.store protocolsSortedByName] value:@"nameOfProtocol" index:&index];
+    self.frameworks = [self simplifiedObjectsFromObjects:[self.store frameworksSortedByName] value:@"nameOfFramework" index:&index];
 }
 
 - (NSArray *)simplifiedObjectsFromObjects:(NSArray *)objects value:(NSString *)value index:(NSUInteger *)index {
@@ -434,5 +449,6 @@
 @synthesize classes;
 @synthesize categories;
 @synthesize protocols;
+@synthesize frameworks;
 
 @end

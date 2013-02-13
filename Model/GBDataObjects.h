@@ -15,6 +15,7 @@
 #import "GBCategoryData.h"
 #import "GBProtocolData.h"
 #import "GBDocumentData.h"
+#import "GBFrameworkData.h"
 
 #import "GBIvarData.h"
 #import "GBMethodData.h"
@@ -25,3 +26,4 @@
 #import "GBAdoptedProtocolsProvider.h"
 #import "GBIvarsProvider.h"
 #import "GBMethodsProvider.h"
+#import "GBFrameworksProvider.h"

@@ -12,6 +12,7 @@
 @class GBCategoryData;
 @class GBProtocolData;
 @class GBDocumentData;
+@class GBFrameworkData;
 
 /** Implements the application's in-memory objects data store.
  
@@ -25,6 +26,8 @@
 	NSMutableDictionary *_categoriesByName;
 	NSMutableSet *_protocols;
 	NSMutableDictionary *_protocolsByName;
+    NSMutableSet *_frameworks;
+    NSMutableDictionary *_frameworksByName;
 	NSMutableSet *_documents;
 	NSMutableDictionary *_documentsByName;
 	NSMutableSet *_customDocuments;
@@ -45,6 +48,7 @@
  @exception NSException Thrown if the given class is already registered.
  @see registerCategory:
  @see registerProtocol:
+ @see registerFramework:
  @see unregisterTopLevelObject:
  @see classWithName:
  @see classes
@@ -61,6 +65,7 @@
  @exception NSException Thrown if the given category is already registered.
  @see registerClass:
  @see registerProtocol:
+ @see registerFramework: 
  @see unregisterTopLevelObject:
  @see categoryWithName:
  @see categories
@@ -77,11 +82,29 @@
  @exception NSException Thrown if the given protocol is already registered.
  @see registerClass:
  @see registerCategory:
+ @see registerFramework:
  @see unregisterTopLevelObject:
  @see protocolWithName:
  @see protocols
  */
 - (void)registerProtocol:(GBProtocolData *)protocol;
+
+/** Registers the given framework to the store data.
+ 
+ If store doesn't yet have the given framework instance registered, the object is added to `frameworks` list. If the same instance is already registered, nothing happens.
+ 
+ @warning *Note:* If another instance of the framework with the same name is registered, an exception is thrown.
+ 
+ @param framework The framework to register.
+ @exception NSException Thrown if the given framework is already registered.
+ @see registerClass:
+ @see registerCategory:
+ @see registerProtocol:
+ @see unregisterTopLevelObject:
+ @see frameworkWithName:
+ @see frameworks
+ */
+- (void)registerFramework:(GBFrameworkData *)framework;
 
 /** Registers the given static document to the store data.
  
@@ -130,6 +153,7 @@
  @return Returns class instance or `nil` if no match is found.
  @see categoryWithName:
  @see protocolWithName:
+ @see frameworkWithName:
  @see classes
  */
 - (GBClassData *)classWithName:(NSString *)name;
@@ -142,6 +166,7 @@
  @return Returns category instance or `nil` if no match is found.
  @see classWithName:
  @see protocolWithName:
+ @see frameworkWithName:
  @see categories
  */
 - (GBCategoryData *)categoryWithName:(NSString *)name;
@@ -154,9 +179,23 @@
  @return Returns protocol instance or `nil` if no match is found.
  @see classWithName:
  @see categoryWithName:
+ @see frameworkWithName:
  @see protocols
  */
 - (GBProtocolData *)protocolWithName:(NSString *)name;
+
+/** Returns the protocol instance that matches the given name.
+ 
+ If no registered protocol matches the given name, `nil` is returned.
+ 
+ @param name The name of the framework to return.
+ @return Returns framework instance or `nil` if no match is found.
+ @see classWithName:
+ @see categoryWithName:
+ @see protocolWithName:
+ @see frameworks
+ */
+- (GBFrameworkData *)frameworkWithName:(NSString *)name;
 
 /** Returns the document instance that matches the given path.
  
@@ -199,6 +238,13 @@
  */
 @property (readonly) NSSet *protocols;
 
+/** The list of all registered frameworks as instances of `GBFrameworkData`.
+ 
+ @see frameworkWithName:
+ @see registerFramework:
+ */
+@property (readonly) NSSet *frameworks;
+
 /** The list of all registered documents as instances of `GBDocumentData`.
  
  @see documentWithName:
@@ -228,5 +274,8 @@
 
 /** Returns all registered protocols sorted by their name. */
 - (NSArray *)protocolsSortedByName;
+
+/** Returns all registered frameworks sorted by their name. */
+- (NSArray *)frameworksSortedByName;
 
 @end

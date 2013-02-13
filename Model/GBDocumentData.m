@@ -38,6 +38,7 @@
 		self.comment.sourceInfo = info;
 		_adoptedProtocols = [[GBAdoptedProtocolsProvider alloc] initWithParentObject:self];
 		_methods = [[GBMethodsProvider alloc] initWithParentObject:self];
+        _frameworks = [[GBFrameworksProvider alloc] initWithParentObject:self];
         
         self.prettyNameOfDocument = [[self.nameOfDocument stringByDeletingPathExtension]stringByReplacingOccurrencesOfString:@"-template" withString:@""];
 	}
@@ -72,6 +73,7 @@
 @synthesize basePathOfDocument;
 @synthesize adoptedProtocols = _adoptedProtocols;
 @synthesize methods = _methods;
+@synthesize frameworks = _frameworks;
 @synthesize prettyNameOfDocument;
 
 @end

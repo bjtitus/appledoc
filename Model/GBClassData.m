@@ -26,6 +26,7 @@
 		_adoptedProtocols = [[GBAdoptedProtocolsProvider alloc] initWithParentObject:self];
 		_ivars = [[GBIvarsProvider alloc] initWithParentObject:self];
 		_methods = [[GBMethodsProvider alloc] initWithParentObject:self];
+        _frameworks = [[GBFrameworksProvider alloc] initWithParentObject:self];
 	}
 	return self;
 }
@@ -46,6 +47,13 @@
 	} else if (sourceClass.nameOfSuperclass && ![self.nameOfSuperclass isEqualToString:sourceClass.nameOfSuperclass]) {
 		GBLogXWarn(self.prefferedSourceInfo, @"%@: Merged class's %@ superclass is different from current!", self, sourceClass);
 	}
+    
+    // Merge framework data.
+    if (![self nameOfFramework]) {
+        self.nameOfFramework = sourceClass.nameOfFramework;
+    } else if (sourceClass.nameOfFramework && ![self.nameOfFramework isEqualToString:sourceClass.nameOfFramework]) {
+		GBLogXWarn(self.prefferedSourceInfo, @"%@: Merged class's %@ framework is different from current!", self, sourceClass);
+    }
 	
 	// Forward merging request to components.
 	[self.adoptedProtocols mergeDataFromProtocolsProvider:sourceClass.adoptedProtocols];
@@ -69,6 +77,7 @@
 
 @synthesize nameOfClass = _className;
 @synthesize nameOfSuperclass;
+@synthesize nameOfFramework;
 @synthesize superclass;
 @synthesize adoptedProtocols = _adoptedProtocols;
 @synthesize ivars = _ivars;

@@ -202,4 +202,11 @@
  */
 @property (readonly) GBComment *previousComment;
 
+/** Returns the filename for the object being tokenized
+ 
+ This is the filename value of the tokenized source. This will always be populated with a value and can be used to determine where the file came from.
+ */
+@property (retain) NSString *filename;
+
+
 @end

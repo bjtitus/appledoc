@@ -514,6 +514,10 @@ NSString *NSStringFromGBPublishedFeedFormats(GBPublishedFeedFormats formats) {
 		basePath = @"Protocols";
 		name = [object nameOfProtocol];
 	}
+    else if ([object isKindOfClass:[GBFrameworkData class]]) {
+        basePath = @"Frameworks";
+        name = [object nameOfFramework];
+    }
 	else if ([object isKindOfClass:[GBDocumentData class]]) {
 		GBDocumentData *document = object;
 		
