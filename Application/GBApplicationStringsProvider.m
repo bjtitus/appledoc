@@ -120,7 +120,7 @@
 		[result setObject:@"Class Hierarchy" forKey:@"classesTitle"];
 		[result setObject:@"Category References" forKey:@"categoriesTitle"];
 		[result setObject:@"Protocol References" forKey:@"protocolsTitle"];
-        [result setObject:@"Framework References" forKey:@"frameworksTitle"];
+        [result setObject:@"Framework Hierarchy" forKey:@"frameworksTitle"];
 	}
 	return result;
 }

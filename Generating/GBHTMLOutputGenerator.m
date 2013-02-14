@@ -269,7 +269,7 @@
 }
 
 - (GBTemplateHandler *)htmlFrameworkTemplate {
-	return [self.templateFiles objectForKey:@"object-template.html"];
+	return [self.templateFiles objectForKey:@"framework-template.html"];
 }
 
 - (GBTemplateHandler *)htmlIndexTemplate {

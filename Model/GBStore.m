@@ -69,10 +69,18 @@
 
 - (NSDictionary *)classesGroupedByFramework {
     NSMutableDictionary *frameworks = [NSMutableDictionary dictionaryWithCapacity:[self.frameworks count]];
+    NSArray *allClasses = [self classesSortedByName];
     for(GBFrameworkData *framework in self.frameworks)
     {
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"frameworks == %@", framework.frameworks];
-        [frameworks setObject:[self.classes filteredSetUsingPredicate:predicate] forKey:framework.nameOfFramework];
+        NSMutableArray *matched = [NSMutableArray arrayWithCapacity:allClasses.count];
+        for(GBClassData *class in allClasses)
+        {
+            if([[(GBFrameworkData *)[class.frameworks.frameworks anyObject] nameOfFramework] isEqualToString:framework.nameOfFramework])
+            {
+                [matched addObject:class];
+            }
+        }
+        [frameworks setObject:matched forKey:framework.nameOfFramework];
     }
     return frameworks;
 }

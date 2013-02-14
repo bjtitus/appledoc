@@ -158,13 +158,23 @@
 	[result setObject:self.settings.projectName forKey:@"projectName"];
 	[result setObject:self.settings.stringTemplates forKey:@"strings"];
     
-    NSArray *classes = [[self.store classesGroupedByFramework] objectForKey:object.nameOfFramework];
+    NSArray *classes = [[[self.store classesGroupedByFramework] objectForKey:object.nameOfFramework] allObjects];
     BOOL hasClasses = [classes count] > 0;
+    
+    NSMutableArray *finalClasses = [NSMutableArray arrayWithCapacity:[classes count]];
+    for (GBClassData *class in classes) {
+        if (!class.includeInOutput) continue;
+		NSMutableDictionary *data = [NSMutableDictionary dictionaryWithCapacity:2];
+		[data setObject:[self hrefForObject:class fromObject:nil] forKey:@"href"];
+		[data setObject:class.nameOfClass forKey:@"title"];
+		[finalClasses addObject:data];
+	}
+
     
     [result setObject:hasClasses ? [GRYes yes] : [GRNo no] forKey:@"hasClasses"];
     
     if(hasClasses)
-        [result setObject:classes forKey:@"classes"];
+        [result setObject:finalClasses forKey:@"classes"];
 	return result;
 }
 
