@@ -103,7 +103,7 @@
 
 /** Specifies whether this is a top level object or not.
  
- Top level objects are classes, categories and protocols.
+ Top level objects are classes, categories, protocols, and frameworks.
  
  @see isStaticDocument;
  */

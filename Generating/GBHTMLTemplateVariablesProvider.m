@@ -157,6 +157,14 @@
 	[result setObject:self.settings.projectCompany forKey:@"projectCompany"];
 	[result setObject:self.settings.projectName forKey:@"projectName"];
 	[result setObject:self.settings.stringTemplates forKey:@"strings"];
+    
+    NSArray *classes = [[self.store classesGroupedByFramework] objectForKey:object.nameOfFramework];
+    BOOL hasClasses = [classes count] > 0;
+    
+    [result setObject:hasClasses ? [GRYes yes] : [GRNo no] forKey:@"hasClasses"];
+    
+    if(hasClasses)
+        [result setObject:classes forKey:@"classes"];
 	return result;
 }
 

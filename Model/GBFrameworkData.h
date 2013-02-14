@@ -50,7 +50,7 @@
 /** Frameworks the class is included in, available via `GBFrameworksProvider`. */
 @property (readonly) GBFrameworksProvider *frameworks;
 
-/** Protocol's methods, available via `GBMethodsProvider`. */
+/** Framework's methods, available via `GBClassDataProvider`. */
 //@property (readonly) GBMethodsProvider *methods;
 
 @end

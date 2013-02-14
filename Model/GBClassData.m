@@ -47,18 +47,12 @@
 	} else if (sourceClass.nameOfSuperclass && ![self.nameOfSuperclass isEqualToString:sourceClass.nameOfSuperclass]) {
 		GBLogXWarn(self.prefferedSourceInfo, @"%@: Merged class's %@ superclass is different from current!", self, sourceClass);
 	}
-    
-    // Merge framework data.
-    if (![self nameOfFramework]) {
-        self.nameOfFramework = sourceClass.nameOfFramework;
-    } else if (sourceClass.nameOfFramework && ![self.nameOfFramework isEqualToString:sourceClass.nameOfFramework]) {
-		GBLogXWarn(self.prefferedSourceInfo, @"%@: Merged class's %@ framework is different from current!", self, sourceClass);
-    }
-	
+    	
 	// Forward merging request to components.
 	[self.adoptedProtocols mergeDataFromProtocolsProvider:sourceClass.adoptedProtocols];
 	[self.ivars mergeDataFromIvarsProvider:sourceClass.ivars];
 	[self.methods mergeDataFromMethodsProvider:sourceClass.methods];
+    [self.frameworks mergeDataFromFrameworksProvider:sourceClass.frameworks];
 }
 
 - (NSString *)description {
@@ -77,7 +71,6 @@
 
 @synthesize nameOfClass = _className;
 @synthesize nameOfSuperclass;
-@synthesize nameOfFramework;
 @synthesize superclass;
 @synthesize adoptedProtocols = _adoptedProtocols;
 @synthesize ivars = _ivars;

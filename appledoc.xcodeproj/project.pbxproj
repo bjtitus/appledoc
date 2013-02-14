@@ -236,6 +236,7 @@
 		D818BAD015203AA700B26451 /* OCHamcrest.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 73FC6E1E11FCD5E200AAD0B9 /* OCHamcrest.framework */; };
 		F5E1646216CBF9BF00B7A10A /* GBFrameworkData.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E1646116CBF9BE00B7A10A /* GBFrameworkData.m */; };
 		F5E1646516CBFA6E00B7A10A /* GBFrameworksProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E1646416CBFA6E00B7A10A /* GBFrameworksProvider.m */; };
+		F5E1646816CC666B00B7A10A /* GBClassesProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E1646716CC666B00B7A10A /* GBClassesProvider.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -556,6 +557,8 @@
 		F5E1646116CBF9BE00B7A10A /* GBFrameworkData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBFrameworkData.m; sourceTree = "<group>"; };
 		F5E1646316CBFA6E00B7A10A /* GBFrameworksProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBFrameworksProvider.h; sourceTree = "<group>"; };
 		F5E1646416CBFA6E00B7A10A /* GBFrameworksProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBFrameworksProvider.m; sourceTree = "<group>"; };
+		F5E1646616CC666A00B7A10A /* GBClassesProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBClassesProvider.h; sourceTree = "<group>"; };
+		F5E1646716CC666B00B7A10A /* GBClassesProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBClassesProvider.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1119,6 +1122,8 @@
 			children = (
 				73FC729711FD925B00AAD0B9 /* GBAdoptedProtocolsProvider.h */,
 				73FC729811FD925B00AAD0B9 /* GBAdoptedProtocolsProvider.m */,
+				F5E1646616CC666A00B7A10A /* GBClassesProvider.h */,
+				F5E1646716CC666B00B7A10A /* GBClassesProvider.m */,
 				F5E1646316CBFA6E00B7A10A /* GBFrameworksProvider.h */,
 				F5E1646416CBFA6E00B7A10A /* GBFrameworksProvider.m */,
 				73FC730611FDAACD00AAD0B9 /* GBIvarsProvider.h */,
@@ -1512,6 +1517,7 @@
 				B4D1FFE515FF5F05009736E2 /* DDXcodeProjectFile.m in Sources */,
 				F5E1646216CBF9BF00B7A10A /* GBFrameworkData.m in Sources */,
 				F5E1646516CBFA6E00B7A10A /* GBFrameworksProvider.m in Sources */,
+				F5E1646816CC666B00B7A10A /* GBClassesProvider.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

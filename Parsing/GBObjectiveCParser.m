@@ -345,6 +345,7 @@
 	[self registerLastCommentToObject:class];
 	[self.tokenizer consume:2];
 	[self matchMethodDeclarationsForProvider:class.methods defaultsRequired:NO];
+    [self matchFrameworkForProvider:class.frameworks];
 	[self.store registerClass:class];
 }
 

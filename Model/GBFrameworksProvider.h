@@ -72,7 +72,7 @@
 /** Returns the array of all framework sorted by their name. */
 - (NSArray *)frameworksSortedByName;
 
-/** The list of all protocols as instances of `GBFrameworkData`. */
+/** The list of all frameworks as instances of `GBFrameworkData`. */
 @property (readonly) NSSet *frameworks;
 
 @end

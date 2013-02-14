@@ -278,4 +278,12 @@
 /** Returns all registered frameworks sorted by their name. */
 - (NSArray *)frameworksSortedByName;
 
+
+
+- (NSDictionary *)classesGroupedByFramework;
+
+- (NSDictionary *)categoriesGroupedByFramework;
+
+- (NSDictionary *)protocolsGroupedByFramework;
+
 @end

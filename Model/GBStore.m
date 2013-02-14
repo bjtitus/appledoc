@@ -67,6 +67,36 @@
     return [[self.frameworks allObjects] sortedArrayUsingDescriptors:descriptors];
 }
 
+- (NSDictionary *)classesGroupedByFramework {
+    NSMutableDictionary *frameworks = [NSMutableDictionary dictionaryWithCapacity:[self.frameworks count]];
+    for(GBFrameworkData *framework in self.frameworks)
+    {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"frameworks == %@", framework.frameworks];
+        [frameworks setObject:[self.classes filteredSetUsingPredicate:predicate] forKey:framework.nameOfFramework];
+    }
+    return frameworks;
+}
+
+- (NSDictionary *)categoriesGroupedByFramework {
+    NSMutableDictionary *frameworks = [NSMutableDictionary dictionaryWithCapacity:[self.frameworks count]];
+    for(GBFrameworkData *framework in frameworks)
+    {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"frameworks == %@", framework.frameworks];
+        [frameworks setObject:[self.categories filteredSetUsingPredicate:predicate] forKey:framework.nameOfFramework];
+    }
+    return frameworks;
+}
+
+- (NSDictionary *)protocolsGroupedByFramework {
+    NSMutableDictionary *frameworks = [NSMutableDictionary dictionaryWithCapacity:[self.frameworks count]];
+    for(GBFrameworkData *framework in frameworks)
+    {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"frameworks == %@", framework.frameworks];
+        [frameworks setObject:[self.protocols filteredSetUsingPredicate:predicate] forKey:framework.nameOfFramework];
+    }
+    return frameworks;
+}
+
 #pragma mark Registration handling
 
 - (void)registerClass:(GBClassData *)class {
