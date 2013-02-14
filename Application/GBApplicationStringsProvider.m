@@ -135,7 +135,8 @@
 		[result setObject:@"Classes" forKey:@"classesTitle"];
 		[result setObject:@"Categories" forKey:@"categoriesTitle"];
 		[result setObject:@"Protocols" forKey:@"protocolsTitle"];
-        [result setObject:@"Frameworks" forKey:@"protocolsTitle"];
+        [result setObject:@"Frameworks" forKey:@"frameworksTitle"];
+        
 	}
 	return result;
 }

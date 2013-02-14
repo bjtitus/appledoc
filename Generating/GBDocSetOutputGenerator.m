@@ -232,10 +232,6 @@
         GBMethodsProvider *methodsProvider;
         if([topLevelObject respondsToSelector:@selector(methods)])
             methodsProvider = [topLevelObject valueForKey:@"methods"];
-        else
-        {
-            NSLog(@"HERE");
-        }
 		
 		// Prepare template variables for object. Note that we reuse the ID assigned while creating the data for Nodes.xml.
 		NSMutableDictionary *objectData = [NSMutableDictionary dictionaryWithCapacity:2];

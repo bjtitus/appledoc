@@ -67,6 +67,8 @@
 		{{/categories}}
 		{{#protocols}}{{>Node}}
 		{{/protocols}}
+        {{#frameworks}}{{>Node}}
+        {{/frameworks}}
 	</Library>
 </DocSetNodes>
 

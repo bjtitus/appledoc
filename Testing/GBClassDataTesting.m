@@ -49,19 +49,24 @@
 	[original mergeDataFromObject:source];
 	// verify
 	assertThat(source.nameOfSuperclass, is(@"NSObject"));
+    assertThat(source.nameOfFramework, is(nil));
 }
 
 - (void)testMergeDataFromObject_shouldLeaveOriginalSuperclassIfDifferent {
 	//setup
 	GBClassData *original = [GBClassData classDataWithName:@"MyClass"];
 	original.nameOfSuperclass = @"C1";
+    original.nameOfFramework = @"F1";
 	GBClassData *source = [GBClassData classDataWithName:@"MyClass"];
 	source.nameOfSuperclass = @"C2";
+    source.nameOfFramework = @"F2";
 	// execute
 	[original mergeDataFromObject:source];
 	// verify
 	assertThat(original.nameOfSuperclass, is(@"C1"));
 	assertThat(source.nameOfSuperclass, is(@"C2"));
+    assertThat(original.nameOfFramework, is(@"F1"));
+    assertThat(source.nameOfFramework, is(@"F2"));
 }
 
 #pragma mark Components merging
