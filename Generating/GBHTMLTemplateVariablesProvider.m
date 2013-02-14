@@ -53,6 +53,8 @@
 - (void)registerObjectDeclaredInSpecificationForProvider:(GBModelBase *)provider toArray:(NSMutableArray *)array;
 - (void)registerObjectFrameworkSpecificationForProvider:(id<GBObjectDataProviding>)provider toArray:(NSMutableArray *)array;
 - (void)registerObjectCompanionGuidesSpecificationForObject:(GBModelBase *)object toArray:(NSMutableArray *)array;
+- (void)registerObjectsForFramework:(GBFrameworkData *)object inDictionary:(NSMutableDictionary *)dict;
+- (void)registerObjectsUsageForFrameworkinDictionary:(NSMutableDictionary *)dict;
 
 - (NSDictionary *)objectSpecificationWithValues:(NSArray *)values title:(NSString *)title;
 - (NSDictionary *)objectSpecificationValueWithData:(id)data href:(NSString *)href;
@@ -157,24 +159,8 @@
 	[result setObject:self.settings.projectCompany forKey:@"projectCompany"];
 	[result setObject:self.settings.projectName forKey:@"projectName"];
 	[result setObject:self.settings.stringTemplates forKey:@"strings"];
-    
-    NSArray *classes = [[[self.store classesGroupedByFramework] objectForKey:object.nameOfFramework] allObjects];
-    BOOL hasClasses = [classes count] > 0;
-    
-    NSMutableArray *finalClasses = [NSMutableArray arrayWithCapacity:[classes count]];
-    for (GBClassData *class in classes) {
-        if (!class.includeInOutput) continue;
-		NSMutableDictionary *data = [NSMutableDictionary dictionaryWithCapacity:2];
-		[data setObject:[self hrefForObject:class fromObject:nil] forKey:@"href"];
-		[data setObject:class.nameOfClass forKey:@"title"];
-		[finalClasses addObject:data];
-	}
-
-    
-    [result setObject:hasClasses ? [GRYes yes] : [GRNo no] forKey:@"hasClasses"];
-    
-    if(hasClasses)
-        [result setObject:finalClasses forKey:@"classes"];
+    [self registerObjectsForFramework:object inDictionary:result];
+    [self registerObjectsUsageForFrameworkinDictionary:result];
 	return result;
 }
 
@@ -632,6 +618,54 @@
 	[dict setObject:protocols ? [GRYes yes] : [GRNo no] forKey:@"hasProtocols"];
 	[dict setObject:(protocols || categories) ? [GRYes yes] : [GRNo no] forKey:@"hasProtocolsOrCategories"];
     [dict setObject:frameworks ? [GRYes yes] : [GRNo no] forKey:@"hasFrameworks"];
+}
+
+- (void)registerObjectsForFramework:(GBFrameworkData *)object inDictionary:(NSMutableDictionary *)dict {
+    // Grab Classes for Framework
+    NSArray *classes = [[[self.store classesGroupedByFramework] objectForKey:object.nameOfFramework] allObjects];
+    NSMutableArray *finalClasses = [NSMutableArray arrayWithCapacity:[classes count]];
+    for (GBClassData *class in classes) {
+        if (!class.includeInOutput) continue;
+		NSMutableDictionary *data = [NSMutableDictionary dictionaryWithCapacity:2];
+		[data setObject:[self hrefForObject:class fromObject:nil] forKey:@"href"];
+		[data setObject:class.nameOfClass forKey:@"title"];
+		[finalClasses addObject:data];
+	}
+    [dict setObject:finalClasses forKey:@"classes"];
+    
+    // Grab Categories for Framework
+    NSArray *categories = [[[self.store categoriesGroupedByFramework] objectForKey:object.nameOfFramework] allObjects];
+    NSMutableArray *finalCategories = [NSMutableArray arrayWithCapacity:[categories count]];
+    for (GBCategoryData *category in categories) {
+        if (!category.includeInOutput) continue;
+		NSMutableDictionary *data = [NSMutableDictionary dictionaryWithCapacity:2];
+		[data setObject:[self hrefForObject:category fromObject:nil] forKey:@"href"];
+		[data setObject:category.nameOfCategory forKey:@"title"];
+		[finalCategories addObject:data];
+	}
+    [dict setObject:finalCategories forKey:@"categories"];
+    
+    // Grab Protocols for Framework
+    NSArray *protocols = [[[self.store protocolsGroupedByFramework] objectForKey:object.nameOfFramework] allObjects];
+    NSMutableArray *finalProtocols = [NSMutableArray arrayWithCapacity:[protocols count]];
+    for (GBProtocolData *protocol in protocols) {
+        if (!protocol.includeInOutput) continue;
+		NSMutableDictionary *data = [NSMutableDictionary dictionaryWithCapacity:2];
+		[data setObject:[self hrefForObject:protocol fromObject:nil] forKey:@"href"];
+		[data setObject:protocol.nameOfProtocol forKey:@"title"];
+		[finalProtocols addObject:data];
+	}
+    [dict setObject:finalProtocols forKey:@"protocols"];
+}
+
+- (void)registerObjectsUsageForFrameworkinDictionary:(NSMutableDictionary *)dict {
+    BOOL classes = [[dict objectForKey:@"classes"] count] > 0;
+	BOOL categories = [[dict objectForKey:@"categories"] count] > 0;
+	BOOL protocols = [[dict objectForKey:@"protocols"] count] > 0;
+	[dict setObject:classes ? [GRYes yes] : [GRNo no] forKey:@"hasClasses"];
+	[dict setObject:categories ? [GRYes yes] : [GRNo no] forKey:@"hasCategories"];
+	[dict setObject:protocols ? [GRYes yes] : [GRNo no] forKey:@"hasProtocols"];
+	[dict setObject:(protocols || categories) ? [GRYes yes] : [GRNo no] forKey:@"hasProtocolsOrCategories"];
 }
 
 @end

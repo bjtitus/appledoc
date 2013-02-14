@@ -87,20 +87,36 @@
 
 - (NSDictionary *)categoriesGroupedByFramework {
     NSMutableDictionary *frameworks = [NSMutableDictionary dictionaryWithCapacity:[self.frameworks count]];
-    for(GBFrameworkData *framework in frameworks)
+    NSArray *allCategories = [self categoriesSortedByName];
+    for(GBFrameworkData *framework in self.frameworks)
     {
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"frameworks == %@", framework.frameworks];
-        [frameworks setObject:[self.categories filteredSetUsingPredicate:predicate] forKey:framework.nameOfFramework];
+        NSMutableArray *matched = [NSMutableArray arrayWithCapacity:allCategories.count];
+        for(GBCategoryData *category in allCategories)
+        {
+            if([[(GBFrameworkData *)[category.frameworks.frameworks anyObject] nameOfFramework] isEqualToString:framework.nameOfFramework])
+            {
+                [matched addObject:category];
+            }
+        }
+        [frameworks setObject:matched forKey:framework.nameOfFramework];
     }
     return frameworks;
 }
 
 - (NSDictionary *)protocolsGroupedByFramework {
     NSMutableDictionary *frameworks = [NSMutableDictionary dictionaryWithCapacity:[self.frameworks count]];
-    for(GBFrameworkData *framework in frameworks)
+    NSArray *allProtocols = [self protocolsSortedByName];
+    for(GBFrameworkData *framework in self.frameworks)
     {
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"frameworks == %@", framework.frameworks];
-        [frameworks setObject:[self.protocols filteredSetUsingPredicate:predicate] forKey:framework.nameOfFramework];
+        NSMutableArray *matched = [NSMutableArray arrayWithCapacity:allProtocols.count];
+        for(GBProtocolData *protocol in allProtocols)
+        {
+            if([[(GBFrameworkData *)[protocol.frameworks.frameworks anyObject] nameOfFramework] isEqualToString:framework.nameOfFramework])
+            {
+                [matched addObject:protocol];
+            }
+        }
+        [frameworks setObject:matched forKey:framework.nameOfFramework];
     }
     return frameworks;
 }

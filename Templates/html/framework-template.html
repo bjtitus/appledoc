@@ -43,9 +43,9 @@
                         <div class="index-column">
                         <h2 class="index-title">{{strings/indexPage/docsTitle}}</h2>
                         <ul>
-                        {{#docs}}
-                        <li><a href="{{href}}">{{title}}</a></li>
-                        {{/docs}}
+                            {{#docs}}
+                                <li><a href="{{href}}">{{title}}</a></li>
+                            {{/docs}}
                         </ul>
                         </div>
                     {{/hasDocs}}
@@ -59,6 +59,35 @@
                         </ul>
                         </div>
                     {{/hasClasses}}
+                        
+                    {{#hasProtocolsOrCategories}}
+                    <div class="index-column">
+                    {{#hasProtocols}}
+                        <h2 class="index-title">{{strings/indexPage/protocolsTitle}}</h2>
+                        <ul>
+                            {{#protocols}}
+                            <li><a href="../{{href}}">{{title}}</a></li>
+                            {{/protocols}}
+                        </ul>
+                    {{/hasProtocols}}
+                    {{#hasCategories}}
+                        <h2 class="index-title">{{strings/indexPage/categoriesTitle}}</h2>
+                        <ul>
+                            {{#categories}}
+                                <li><a href="../{{href}}">{{title}}</a></li>
+                            {{/categories}}
+                        </ul>
+                    {{/hasCategories}}
+                    {{#hasFrameworks}}
+                        <h2 class="index-title">{{strings/indexPage/frameworksTitle}}</h2>
+                        <ul>
+                            {{#frameworks}}
+                                <li><a href="../{{href}}">{{title}}</a></li>
+                            {{/frameworks}}
+                        </ul>
+                    {{/hasFrameworks}}
+                    </div>
+                    {{/hasProtocolsOrCategories}}
                 </div>
 				<div class="main-navigation navigation-bottom">
 					{{>Navigation}}
