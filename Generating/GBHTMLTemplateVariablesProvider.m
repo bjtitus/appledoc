@@ -230,7 +230,7 @@
 	if (!object) return nil;
 	if ([object isKindOfClass:[GBClassData class]] && ![[self.store classes] containsObject:object]) return nil;
 	if ([object isKindOfClass:[GBCategoryData class]] && ![[self.store categories] containsObject:object]) return nil;
-	if ([object isKindOfClass:[GBProtocolData class]] && ![self.store protocolWithName:[(GBProtocolData *)object nameOfProtocol]]) return nil;
+	if ([object isKindOfClass:[GBProtocolData class]] && ![[self.store protocols] containsObject:object]) return nil;
     if ([object isKindOfClass:[GBFrameworkData class]] && ![self.store frameworkWithName:[(GBFrameworkData *)object nameOfFramework]]) return nil;
 	if ([object isKindOfClass:[GBDocumentData class]] && ![[self.store documents] containsObject:object]) return nil;
 	return [self.settings htmlReferenceForObject:object fromSource:source];
